@@ -70,7 +70,6 @@ public class PriorityScheduler extends Scheduler {
 	boolean intStatus = Machine.interrupt().disable();
 		       
 	KThread thread = KThread.currentThread();
-
 	int priority = getPriority(thread);
 	if (priority == priorityMaximum)
 	    return false;
