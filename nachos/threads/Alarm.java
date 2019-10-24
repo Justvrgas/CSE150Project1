@@ -6,7 +6,9 @@ import nachos.machine.*;
  * Uses the hardware timer to provide preemption, and to allow threads to sleep
  * until a certain time.
  */
+
 public class Alarm {
+	
     /**
      * Allocate a new Alarm. Set the machine's timer interrupt handler to this
      * alarm's callback.
@@ -14,7 +16,9 @@ public class Alarm {
      * <p><b>Note</b>: Nachos will not function correctly with more than one
      * alarm.
      */
+//	LinkedList LinkedList;
     public Alarm() {
+//    LinkedList = new LinkedList;
 	Machine.timer().setInterruptHandler(new Runnable() {
 		public void run() { timerInterrupt(); }
 	    });
@@ -29,7 +33,7 @@ public class Alarm {
     public void timerInterrupt() {
 	KThread.currentThread().yield();
     }
-
+    //this is a test for my push
     /**
      * Put the current thread to sleep for at least <i>x</i> ticks,
      * waking it up in the timer interrupt handler. The thread must be
