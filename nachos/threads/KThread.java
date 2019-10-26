@@ -1,5 +1,14 @@
 package nachos.threads;
 
+import java.awt.print.Printable;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import nachos.machine.*;
 
 /**
@@ -181,21 +190,38 @@ public class KThread {
      * destroyed automatically by the next thread to run, when it is safe to
      * delete this thread.
      */
+    
+    /*
+     *  __ _       _     _     
+	  / _(_)     (_)   | |    
+	 | |_ _ _ __  _ ___| |__  
+	 |  _| | '_ \| / __| '_ \ 
+	 | | | | | | | \__ \ | | |
+	 |_| |_|_| |_|_|___/_| |_|                     
+     */
     public static void finish() {
 	Lib.debug(dbgThread, "Finishing thread: " + currentThread.toString());
 	
 	Machine.interrupt().disable();
-
 	Machine.autoGrader().finishingCurrentThread();
-
 	Lib.assertTrue(toBeDestroyed == null);
-	toBeDestroyed = currentThread;
+	toBeDestroyed = currentThread; //destroy thread when it is finished
+	currentThread.status = statusFinished; //the thread is done so you can set its status to finished
 
+	//Added by Justin Vargas 10/23
+	//create a new thread to hold the finishing thread
+	KThread nextThread;
 	
-
-	currentThread.status = statusFinished;
+	//Added by Justin Vargas 10/23
+	//while there are threads in the stack retrieve the next thread and set it to ready and remove it from the stack
+	if (!joiningThreads.isEmpty()) {
+		nextThread = joiningThreads.firstElement();
+		joiningThreads.removeElement(currentThread);
+		nextThread.ready();
+	}
 	
 	sleep();
+	
     }
 
     /**
@@ -273,20 +299,37 @@ public class KThread {
      * call is not guaranteed to return. This thread must not be the current
      * thread.
      */
+    
+    /*
+     * (_)     (_)      
+        _  ___  _ _ __  
+       | |/ _ \| | '_ \ 
+       | | (_) | | | | |
+       | |\___/|_|_| |_|
+      _/ |              
+     |__/               
+     */
     public void join() {
-	Lib.debug(dbgThread, "Joining to thread: " + toString());
-	Lib.assertTrue(this != currentThread);
-	
-/**	 Implement KThread.join(). Note that another thread does not have to call join(), 
-	 but if it is called, it must be called only once. The result of calling join() 
-	 a second time on the same thread is undefined, even if the second caller is a 
-	 different thread than the first caller. A thread must finish executing normally 
-	 whether or not it is joined.
- */
-	
-	
-	
-	
+    
+    	Lib.debug(dbgThread, "Joining to thread: " + toString());
+    	Lib.assertTrue(this != currentThread);
+    	
+    	//Added by Justin Vargas 10/23
+    	//prevents unfinished and same threads from trying to join again
+    	if (this.status == statusFinished) {
+			return;
+		}
+    	//Added by Justin Vargas 10/23
+    	//if thread is not done then disable interrrupts and add the thread to the stack
+    	else {
+    		Machine.interrupt().disable();
+    		joiningThreads.add(currentThread);
+    		sleep();
+    	}
+    	
+    	//Added By: Justin Vargas 10/23
+    	//enable interrupts
+    	Machine.interrupt().enable();
 
     }
 
@@ -294,7 +337,7 @@ public class KThread {
      * Create the idle thread. Whenever there are no threads ready to be run,
      * and <tt>runNextThread()</tt> is called, it will run the idle thread. The
      * idle thread must never block, and it will only be allowed to run when
-     * all other threads are blocked.
+     * all oter threads are blocked.
      *
      * <p>
      * Note that <tt>ready()</tt> never adds the idle thread to the ready set.
@@ -442,7 +485,9 @@ public class KThread {
     private String name = "(unnamed thread)";
     private Runnable target;
     private TCB tcb;
-
+    //added by Justin Vargas 10/23
+    //creating a stack of threads to hold the joining threads
+    private static Stack<KThread> joiningThreads = new Stack<KThread>();
     /**
      * Unique identifer for this thread. Used to deterministically compare
      * threads.

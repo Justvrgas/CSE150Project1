@@ -25,3 +25,7 @@
 /SynchList.class
 /ThreadQueue.class
 /ThreadedKernel.class
+/KThread$3.class
+/KThread$4.class
+/PriorityScheduler$comparatorTS.class
+/PriorityScheduler$PriorityThreadQueue.class

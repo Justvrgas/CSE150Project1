@@ -5,6 +5,7 @@ import nachos.machine.*;
 import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * A scheduler that chooses threads based on their priorities.
@@ -70,6 +71,7 @@ public class PriorityScheduler extends Scheduler {
 	boolean intStatus = Machine.interrupt().disable();
 		       
 	KThread thread = KThread.currentThread();
+
 	int priority = getPriority(thread);
 	if (priority == priorityMaximum)
 	    return false;
@@ -126,7 +128,7 @@ public class PriorityScheduler extends Scheduler {
      */
     protected class PriorityQueue extends ThreadQueue {
 	PriorityQueue(boolean transferPriority) {
-	    this.transferPriority = transferPriority;
+//	    this.transferPriority = transferPriority;
 	}
 
 	public void waitForAccess(KThread thread) {
@@ -139,9 +141,24 @@ public class PriorityScheduler extends Scheduler {
 	    getThreadState(thread).acquire(this);
 	}
 
+	
+	/*
+	 * 	 | |/ /__   __| |                      | |                 | |__   __| |                      | |
+		 | ' /   | |  | |__  _ __ ___  __ _  __| |  _ __   _____  _| |_ | |  | |__  _ __ ___  __ _  __| |
+		 |  <    | |  | '_ \| '__/ _ \/ _` |/ _` | | '_ \ / _ \ \/ / __|| |  | '_ \| '__/ _ \/ _` |/ _` |
+		 | . \   | |  | | | | | |  __/ (_| | (_| | | | | |  __/>  <| |_ | |  | | | | | |  __/ (_| | (_| |
+		 |_|\_\  |_|  |_| |_|_|  \___|\__,_|\__,_| |_| |_|\___/_/\_\\__||_|  |_| |_|_|  \___|\__,_|\__,_|
+                                                                                                 
+	 */
 	public KThread nextThread() {
 	    Lib.assertTrue(Machine.interrupt().disabled());
 	    // implement me
+	   
+	    
+	    
+	    
+	    
+	    
 	    return null;
 	}
 
@@ -151,6 +168,14 @@ public class PriorityScheduler extends Scheduler {
 	 *
 	 * @return	the next thread that <tt>nextThread()</tt> would
 	 *		return.
+	 */
+	/*	  _____		   _	  _   _  		  _     _________						 _	
+	 * 	 |  __ (_)    | |    | \ | |         | |   |__   __| |                      | |
+		 | |__) |  ___| | __ |  \| | _____  _| |_     | |  | |__  _ __ ___  __ _  __| |
+		 |  ___/ |/ __| |/ / | . ` |/ _ \ \/ / __|    | |  | '_ \| '__/ _ \/ _` |/ _` |
+		 | |   | | (__|   <  | |\  |  __/>  <| |_     | |  | | | | | |  __/ (_| | (_| |
+		 |_|   |_|\___|_|\_\ |_| \_|\___/_/\_\\__|    |_|  |_| |_|_|  \___|\__,_|\__,_|
+                                                                               
 	 */
 	protected ThreadState pickNextThread() {
 	    // implement me
@@ -166,7 +191,8 @@ public class PriorityScheduler extends Scheduler {
 	 * <tt>true</tt> if this queue should transfer priority from waiting
 	 * threads to the owning thread.
 	 */
-	public boolean transferPriority;
+	
+	public KThread lockerThread = null;
     }
 
     /**
