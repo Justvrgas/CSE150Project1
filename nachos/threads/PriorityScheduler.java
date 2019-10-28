@@ -5,7 +5,8 @@ import nachos.machine.*;
 import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * A scheduler that chooses threads based on their priorities.
@@ -127,72 +128,69 @@ public class PriorityScheduler extends Scheduler {
      * A <tt>ThreadQueue</tt> that sorts threads by priority.
      */
     protected class PriorityQueue extends ThreadQueue {
-	PriorityQueue(boolean transferPriority) {
-//	    this.transferPriority = transferPriority;
-	}
-
-	public void waitForAccess(KThread thread) {
-	    Lib.assertTrue(Machine.interrupt().disabled());
-	    getThreadState(thread).waitForAccess(this);
-	}
-
-	public void acquire(KThread thread) {
-	    Lib.assertTrue(Machine.interrupt().disabled());
-	    getThreadState(thread).acquire(this);
-	}
-
+    	
+	    /**
+	     * <tt>true</tt> if this queue should transfer priority from waiting
+	     * threads to the owning thread.
+	     */
+	    public boolean transferPriority; 
+	    	
+		PriorityQueue(boolean transferPriority) {
+		    this.transferPriority = transferPriority;
+		}
 	
-	/*
-	 * 	 | |/ /__   __| |                      | |                 | |__   __| |                      | |
-		 | ' /   | |  | |__  _ __ ___  __ _  __| |  _ __   _____  _| |_ | |  | |__  _ __ ___  __ _  __| |
-		 |  <    | |  | '_ \| '__/ _ \/ _` |/ _` | | '_ \ / _ \ \/ / __|| |  | '_ \| '__/ _ \/ _` |/ _` |
-		 | . \   | |  | | | | | |  __/ (_| | (_| | | | | |  __/>  <| |_ | |  | | | | | |  __/ (_| | (_| |
-		 |_|\_\  |_|  |_| |_|_|  \___|\__,_|\__,_| |_| |_|\___/_/\_\\__||_|  |_| |_|_|  \___|\__,_|\__,_|
-                                                                                                 
-	 */
-	public KThread nextThread() {
-	    Lib.assertTrue(Machine.interrupt().disabled());
-	    // implement me
-	   
-	    
-	    
-	    
-	    
-	    
-	    return null;
-	}
-
-	/**
-	 * Return the next thread that <tt>nextThread()</tt> would return,
-	 * without modifying the state of this queue.
-	 *
-	 * @return	the next thread that <tt>nextThread()</tt> would
-	 *		return.
-	 */
-	/*	  _____		   _	  _   _  		  _     _________						 _	
-	 * 	 |  __ (_)    | |    | \ | |         | |   |__   __| |                      | |
-		 | |__) |  ___| | __ |  \| | _____  _| |_     | |  | |__  _ __ ___  __ _  __| |
-		 |  ___/ |/ __| |/ / | . ` |/ _ \ \/ / __|    | |  | '_ \| '__/ _ \/ _` |/ _` |
-		 | |   | | (__|   <  | |\  |  __/>  <| |_     | |  | | | | | |  __/ (_| | (_| |
-		 |_|   |_|\___|_|\_\ |_| \_|\___/_/\_\\__|    |_|  |_| |_|_|  \___|\__,_|\__,_|
-                                                                               
-	 */
-	protected ThreadState pickNextThread() {
-	    // implement me
-	    return null;
-	}
+		public void waitForAccess(KThread thread) {
+		    Lib.assertTrue(Machine.interrupt().disabled());
+		    getThreadState(thread).waitForAccess(this);
+		}
 	
-	public void print() {
-	    Lib.assertTrue(Machine.interrupt().disabled());
-	    // implement me (if you want)
-	}
-
-	/**
-	 * <tt>true</tt> if this queue should transfer priority from waiting
-	 * threads to the owning thread.
-	 */
+		public void acquire(KThread thread) {
+		    Lib.assertTrue(Machine.interrupt().disabled());
+		    getThreadState(thread).acquire(this);
+		}
 	
-	public KThread lockerThread = null;
+		public KThread nextThread() {
+		    Lib.assertTrue(Machine.interrupt().disabled());
+		    // implement me
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    return null;
+		}
+	
+		/**
+		 * Return the next thread that <tt>nextThread()</tt> would return,
+		 * without modifying the state of this queue.
+		 *
+		 * @return	the next thread that <tt>nextThread()</tt> would
+		 *		return.
+		 */
+		protected ThreadState pickNextThread() {
+		    // implement me
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		    return null;
+		}
+		
+		
+		
+		public void print() {
+		    Lib.assertTrue(Machine.interrupt().disabled());
+		    // implement me (if you want)
+		}
+	
     }
 
     /**
@@ -277,10 +275,20 @@ public class PriorityScheduler extends Scheduler {
 	public void acquire(PriorityQueue waitQueue) {
 	    // implement me
 	}	
+	
+	
+	
 
 	/** The thread with which this object is associated. */	   
 	protected KThread thread;
 	/** The priority of the associated thread. */
-	protected int priority;
+	protected int priority;//JV 10/26: contains the threads actual priority
+	
+	protected int effectiveP;//JV 10/26: contains the threads effective priority
+	protected long elapsedTime;//JV 10/26: time since the thread has been in the queue
+	protected Stack<PriorityQueue> waitList;//JV 10/26: stack that represents the waitList order by Priority
+	
+	
+	
     }
 }
