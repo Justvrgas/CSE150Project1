@@ -1,7 +1,5 @@
 package nachos.threads;
 
-import java.util.LinkedList;
-
 import nachos.machine.*;
 
 /**
@@ -15,28 +13,7 @@ public class Communicator {
     /**
      * Allocate a new communicator.
      */
-	
-	//Added by Justin Vargas 10/28: create private variables in the public class communicator so that the methods can access the variables
-	private Lock lock;
-	private Condition2 Speakers;
-	private Condition2 Listeners;
-	private LinkedList<Integer> number;
-	private int speakerCount;
-	private int listenerCount;
-	///////////////////////////////////////////
-	
     public Communicator() {
-    	//Added by Jake 10/28
-    	//Initialize lock to provide atomicity
-    	lock = new Lock();
-    	//Creates private conditions so they cannot overlap
-    	Speakers = new Condition2(lock);
-    	Listeners = new Condition2(lock);
-    	//Create private number linkedlist to transfer the word
-    	number = new LinkedList<Integer>();
-    	//Create private counters for listen and speak to check if they've been used
-    	speakerCount = 0;
-    	listenerCount = 0;
     }
 
     /**
@@ -50,25 +27,6 @@ public class Communicator {
      * @param	word	the integer to transfer.
      */
     public void speak(int word) {
-    	//Added by Jake 10/28
-    	//Acquire atomicity
-    	lock.acquire();
-    	//Increment Speak Counter since you use the speak function
-    	speakerCount++;
-    	//Wait for the listen function to be called
-    	while(listenerCount <= 0) {
-    		Speakers.sleep();
-    	}
-    	//If listen is called decrement it before doing anything
-    	listenerCount--;
-    	//Add word to the number list
-    	number.add(word);
-    	//Get listen function ready to work
-    	Listeners.wake();
-    	//Sleep speaker function
-    	Speakers.sleep();
-    	//Release atomicity
-    	lock.release();
     }
 
     /**
@@ -78,34 +36,6 @@ public class Communicator {
      * @return	the integer transferred.
      */    
     public int listen() {
-    	//Addded by Jake 10/28
-    	//Acquire atomicity
-    	lock.acquire();
-    	//Increment listen counter since listen is called
-    	listenerCount++;
-    	//If speak isn't called wait
-    	while(speakerCount <= 0){
-    		Listeners.sleep();
-    	}
-    	//If the word wasn't given to number list you set speaker to ready, and decrement speaker since this
-    	//speaker wasn't transfering any data, and you set listen to wait again
-    	if(number.isEmpty()) {
-    		Speakers.wake();
-    		speakerCount--;
-    		Listeners.sleep();
-    	}
-    	//Else, you decrement speaker and continue with the transfer
-    	
-    		speakerCount--;
-    	
-    	//Simple switch function where we grab the first element from the linked list and set it to temp
-    	int temp = number.poll();
-    	//Set speaker to ready
-	    Speakers.wake();
-	    //Release atomicity
-	    lock.release();
-	    //Return the transfer value
-	    return temp;
+	return 0;
     }
-    
 }
