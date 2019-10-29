@@ -1,7 +1,6 @@
 package nachos.threads;
 
 import java.util.LinkedList;
-import java.util.concurrent.locks.Lock;
 
 import nachos.machine.*;
 
@@ -16,19 +15,28 @@ public class Communicator {
     /**
      * Allocate a new communicator.
      */
-
+	
+	//Added by Justin Vargas 10/28: create private variables in the public class communicator so that the methods can access the variables
+	private Lock lock;
+	private Condition2 Speakers;
+	private Condition2 Listeners;
+	private LinkedList<Integer> number;
+	private int speakerCount;
+	private int listenerCount;
+	///////////////////////////////////////////
+	
     public Communicator() {
     	//Added by Jake 10/28
     	//Initialize lock to provide atomicity
-    	private Lock lock = new Lock();
+    	lock = new Lock();
     	//Creates private conditions so they cannot overlap
-    	private Condition Speakers = lock.newCondition();
-    	private Condition Listeners = lock.newCondition();
+    	Speakers = new Condition2(lock);
+    	Listeners = new Condition2(lock);
     	//Create private number linkedlist to transfer the word
-    	private LinkedList<Integer> number = new LinkedList<Integer>();
+    	number = new LinkedList<Integer>();
     	//Create private counters for listen and speak to check if they've been used
-    	private int speakerCount = 0;
-    	private int listenerCount = 0;
+    	speakerCount = 0;
+    	listenerCount = 0;
     }
 
     /**
@@ -69,7 +77,7 @@ public class Communicator {
      *
      * @return	the integer transferred.
      */    
-    public int listen(int word) {
+    public int listen() {
     	//Addded by Jake 10/28
     	//Acquire atomicity
     	lock.acquire();
@@ -84,18 +92,14 @@ public class Communicator {
     	if(number.isEmpty()) {
     		Speakers.wake();
     		speakerCount--;
-    		Listener.sleep();
+    		Listeners.sleep();
     	}
     	//Else, you decrement speaker and continue with the transfer
-    	else {
+    	
     		speakerCount--;
-    	}
+    	
     	//Simple switch function where we grab the first element from the linked list and set it to temp
-    	int temp = -1;
-    	if(!number.isEmpty()) {
-    		//Removes first element and sets it to temp
-    		temp = number.pollFirst();
-    	}
+    	int temp = number.poll();
     	//Set speaker to ready
 	    Speakers.wake();
 	    //Release atomicity
