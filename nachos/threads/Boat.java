@@ -73,15 +73,15 @@ public static void selfTest()
     		System.out.println("Created Adult Itinerary");
     	}
     		 
-        for (int i=1; i<= children; i++) {
+//        for (int i=1; i<= children; i++) {
         	
-        KThread child = new KThread(c);
-        child.setName("Child: " + i);
-        if (showResult)
-        {
-        	System.out.println("Child " + i + " created");
-        }
-        child.fork();
+//        KThread child = new KThread(c);
+//        child.setName("Child: " + i);
+//        if (showResult)
+//        {
+//        	System.out.println("Child " + i + " created");
+//        }
+//        child.fork();
     }
         
         
@@ -114,16 +114,16 @@ public static void selfTest()
     	{
     		System.out.println("Adult rowed to Molokai");
     	}
-    	adultsAtOahu = AdultsAtOahu -1;
+//    	adultsAtOahu = AdultsAtOahu -1;
     	bPlace = "Molokai";
-    	adultsAt
+//    	adultsAt
     	
     	
     }
 
     static void ChildItinerary()
     {
-    	boat_permit.acquire();
+//    	boat_permit.acquire();
     }
 
     static void SampleItinerary()
