@@ -24,8 +24,6 @@ public class Communicator {
     	//Creates new condition2 to check before doing anything without using semaphores
      	Speakers = new Condition2(lock);
     	Listeners = new Condition2(lock);
-    	//Create number linkedlist to transfer the word
-    	number = new LinkedList<Integer>();
     	//Create counters for listen and speak to check if they've been used
     	speakerCount = 0;
     	listenerCount = 0;
@@ -54,7 +52,7 @@ public class Communicator {
     	//If listen is called decrement it before doing anything
     	listenerCount--;
     	//Add word to front the number list, this way when we poll we always remove the correct value
-    	number.add(int word);
+    	number.addFirst(word);
     	//Get listen function ready to work
     	Listeners.wake();
     	//Sleep speaker function
@@ -94,8 +92,7 @@ public class Communicator {
     	int temp = -1;
     	//Set temp to the first element and remove it if there is an element to use
     	if(!number.isEmpty()) {
-    		temp = number.getFirst();
-    		number.remove();
+    		temp = number.get(0).intValue();
     	}
     	//Set speaker to ready
 	    Speakers.wake();
@@ -109,7 +106,7 @@ public class Communicator {
     private Lock lock;
 	private Condition2 Speakers;
 	private Condition2 Listeners;
-	private LinkedList<Integer> number;
+	private LinkedList<Integer> number = new LinkedList<Integer>();
 	private int speakerCount;
 	private int listenerCount;
 }
