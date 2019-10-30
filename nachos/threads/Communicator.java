@@ -62,8 +62,8 @@ public class Communicator {
     	}
     	//If listen is called decrement it before doing anything
     	listenerCount--;
-    	//Add word to the number list
-    	number.add(word);
+    	//Add word to front the number list, this way when we poll we always remove the correct value
+    	number.addFirst(word);
     	//Get listen function ready to work
     	Listeners.wake();
     	//Sleep speaker function
@@ -97,8 +97,10 @@ public class Communicator {
     	}
     	//Else, you decrement speaker and continue with the transfer
     	speakerCount--;  	
-    	//Set temp to the first element and remove it
-    	int temp = number.poll();
+    	//Set temp to the first element and remove it if there is an element to use
+    	if(!number.isEmpty()) {
+    		int temp = number.poll();
+    	}
     	//Set speaker to ready
 	    Speakers.wake();
 	    //Release atomicity
