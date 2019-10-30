@@ -96,10 +96,12 @@ public class Communicator {
     		Listeners.sleep();
     	}
     	//Else, you decrement speaker and continue with the transfer
-    	speakerCount--;  	
+    	speakerCount--;  
+    	//Initialize temp value for the transfer coming up
+    	int temp = -1;
     	//Set temp to the first element and remove it if there is an element to use
     	if(!number.isEmpty()) {
-    		int temp = number.poll();
+    		temp = number.poll();
     	}
     	//Set speaker to ready
 	    Speakers.wake();
