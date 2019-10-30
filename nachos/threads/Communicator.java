@@ -85,6 +85,7 @@ public class Communicator {
     		Listeners.sleep();
     	}
     	//Else, you decrement speaker and continue with the transfer
+<<<<<<< HEAD
     	else {
     		speakerCount--; 
     	}
@@ -93,6 +94,12 @@ public class Communicator {
     	//Set temp to the first element and remove it if there is an element to use
     	if(!number.isEmpty()) {
     		temp = number.get(0).intValue();
+=======
+    	speakerCount--;  	
+    	//Set temp to the first element and remove it if there is an element to use
+    	if(!number.isEmpty()) {
+    		int temp = number.poll();
+>>>>>>> parent of d6499a6... Task 4 : Fix temp issue
     	}
     	//Set speaker to ready
 	    Speakers.wake();
