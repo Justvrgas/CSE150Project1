@@ -16,15 +16,6 @@ public class Communicator {
      * Allocate a new communicator.
      */
 	
-	//Added by Justin Vargas 10/28: create private variables in the public class communicator so that the methods can access the variables
-//	private Lock lock;
-//	private Condition2 Speakers;
-//	private Condition2 Listeners;
-//	private LinkedList<Integer> number;
-//	private int speakerCount;
-//	private int listenerCount;
-	///////////////////////////////////////////
-	
     public Communicator() {
     	//Added by Jake 10/28
     	//Edited by Justin Vargas 10/28
@@ -91,17 +82,20 @@ public class Communicator {
     	//If the word wasn't given to number list you set speaker to ready, and decrement speaker since this
     	//speaker wasn't transfering any data, and you set listen to wait again
     	if(number.isEmpty()) {
-    		Speakers.wake();
     		speakerCount--;
+    		Speakers.wake();
     		Listeners.sleep();
     	}
     	//Else, you decrement speaker and continue with the transfer
-    	speakerCount--;  
+    	else {
+    		speakerCount--; 
+    	}
     	//Initialize temp value for the transfer coming up
     	int temp = -1;
     	//Set temp to the first element and remove it if there is an element to use
     	if(!number.isEmpty()) {
-    		temp = number.poll();
+    		temp = number.get(0);
+    		number.remove(0);
     	}
     	//Set speaker to ready
 	    Speakers.wake();
