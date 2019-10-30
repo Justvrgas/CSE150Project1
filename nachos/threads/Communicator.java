@@ -17,24 +17,25 @@ public class Communicator {
      */
 	
 	//Added by Justin Vargas 10/28: create private variables in the public class communicator so that the methods can access the variables
-	private Lock lock;
-	private Condition2 Speakers;
-	private Condition2 Listeners;
-	private LinkedList<Integer> number;
-	private int speakerCount;
-	private int listenerCount;
+//	private Lock lock;
+//	private Condition2 Speakers;
+//	private Condition2 Listeners;
+//	private LinkedList<Integer> number;
+//	private int speakerCount;
+//	private int listenerCount;
 	///////////////////////////////////////////
 	
     public Communicator() {
     	//Added by Jake 10/28
+    	//Edited by Justin Vargas 10/28
     	//Initialize lock to provide atomicity
     	lock = new Lock();
-    	//Creates private conditions so they cannot overlap
+    	//Creates new conditions to check before doing anything
     	Speakers = new Condition2(lock);
     	Listeners = new Condition2(lock);
-    	//Create private number linkedlist to transfer the word
+    	//Create number linkedlist to transfer the word
     	number = new LinkedList<Integer>();
-    	//Create private counters for listen and speak to check if they've been used
+    	//Create counters for listen and speak to check if they've been used
     	speakerCount = 0;
     	listenerCount = 0;
     }
@@ -95,10 +96,8 @@ public class Communicator {
     		Listeners.sleep();
     	}
     	//Else, you decrement speaker and continue with the transfer
-    	
-    		speakerCount--;
-    	
-    	//Simple switch function where we grab the first element from the linked list and set it to temp
+    	speakerCount--;  	
+    	//Set temp to the first element and remove it
     	int temp = number.poll();
     	//Set speaker to ready
 	    Speakers.wake();
@@ -107,5 +106,12 @@ public class Communicator {
 	    //Return the transfer value
 	    return temp;
     }
-    
+    //Added by Justin Vargas 10/28: create private variables in the public class communicator so that the methods can access the variables
+    //Edited by Jake 10/29 : Initializing everything like in Condition 2
+    private Lock lock;
+	private Condition2 Speakers;
+	private Condition2 Listeners;
+	private LinkedList<Integer> number;
+	private int speakerCount;
+	private int listenerCount;
 }
