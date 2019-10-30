@@ -21,8 +21,8 @@ public class Communicator {
     	//Edited by Justin Vargas 10/28
     	//Initialize lock to provide atomicity
     	lock = new Lock();
-    	//Creates new conditions to check before doing anything
-    	Speakers = new Condition2(lock);
+    	//Creates new condition2 to check before doing anything without using semaphores
+     	Speakers = new Condition2(lock);
     	Listeners = new Condition2(lock);
     	//Create number linkedlist to transfer the word
     	number = new LinkedList<Integer>();
@@ -54,7 +54,7 @@ public class Communicator {
     	//If listen is called decrement it before doing anything
     	listenerCount--;
     	//Add word to front the number list, this way when we poll we always remove the correct value
-    	number.addFirst(word);
+    	number.add(int word);
     	//Get listen function ready to work
     	Listeners.wake();
     	//Sleep speaker function
@@ -94,8 +94,8 @@ public class Communicator {
     	int temp = -1;
     	//Set temp to the first element and remove it if there is an element to use
     	if(!number.isEmpty()) {
-    		temp = number.get(0);
-    		number.remove(0);
+    		temp = number.getFirst();
+    		number.remove();
     	}
     	//Set speaker to ready
 	    Speakers.wake();
