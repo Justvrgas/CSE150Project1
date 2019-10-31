@@ -54,7 +54,7 @@ public class Communicator {
     	//If listen is called decrement it before doing anything
     	listenerCount--;
     	//Add word to front the number list, this way when we poll we always remove the correct value
-    	number.add(int word);
+    	number.add(word);
     	//Get listen function ready to work
     	Listeners.wake();
     	//Sleep speaker function
